@@ -45,6 +45,17 @@
   sections.forEach(function (s) { io.observe(s); });
 })();
 
+/* ===== Seamless tech stack loop ===== */
+(function () {
+  var track = document.getElementById("tech-stack");
+  if (!track) return;
+  Array.prototype.slice.call(track.children).forEach(function (item) {
+    var clone = item.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    track.appendChild(clone);
+  });
+})();
+
 /* ===== Skills accordion ("What I do?") ===== */
 (function () {
   var items = document.querySelectorAll("#home ul.space-y-4 > li");
