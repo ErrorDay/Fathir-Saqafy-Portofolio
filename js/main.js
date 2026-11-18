@@ -74,7 +74,9 @@
   var canvas = document.querySelector("#home canvas");
   if (!canvas) return;
   var colors = ["#5e4491", "#A476FF", "#241a38"];
-  var blue = { r: 75, g: 156, b: 255 };            /* warna biru logo */
+  var blue = { r: 75, g: 156, b: 255 };
+  var pythonBlue = { r: 55, g: 118, b: 171 };
+  var pythonYellow = { r: 255, g: 212, b: 59 };
   var speed = 33, smooth = true;
   var fontSize = 16, cw = 10, ch = 20;
   var sub = 4;                                       /* resolusi sampling mask per sel huruf */
@@ -82,13 +84,16 @@
   var ctx = canvas.getContext("2d");
   if (!ctx) { console.error("Could not initialize the code animation canvas."); return; }
   var dragonPath = new Path2D("M12.778 5.943s-1.97-.13-5.327.92c-3.42 1.07-5.36 2.587-5.36 2.587s5.098-2.847 10.852-3.008zm7.351 3.095l.257-.017s-1.468-1.78-4.278-2.648c1.58.642 2.954 1.493 4.021 2.665zm.42.74c.039-.068.166.217.263.337.004.024.01.039-.045.027-.005-.025-.013-.032-.013-.032s-.135-.08-.177-.137c-.041-.057-.049-.157-.028-.195zm3.448 8.479s.312-3.578-5.31-4.403a18.277 18.277 0 0 0-2.524-.187c-4.506.06-4.67-5.197-1.275-5.462 1.407-.116 3.087.643 4.73 1.408-.007.204.002.385.136.552.134.168.648.35.813.445.164.094.691.43 1.014.85.07-.131.654-.512.654-.512s-.14.003-.465-.119c-.326-.122-.713-.49-.722-.511-.01-.022-.015-.055.06-.07.059-.049-.072-.207-.13-.265-.058-.058-.445-.716-.454-.73-.009-.016-.012-.031-.04-.05-.085-.027-.46.04-.46.04s-.575-.283-.774-.893c.003.107-.099.224 0 .469-.3-.127-.558-.344-.762-.88-.12.305 0 .499 0 .499s-.707-.198-.82-.85c-.124.293 0 .469 0 .469s-1.153-.602-3.069-.61c-1.283-.118-1.55-2.374-1.43-2.754 0 0-1.85-.975-5.493-1.406-3.642-.43-6.628-.065-6.628-.065s6.45-.31 11.617 1.783c.176.785.704 2.094.989 2.723-.815.563-1.733 1.092-1.876 2.97-.143 1.878 1.472 3.53 3.474 3.58 1.9.102 3.214.116 4.806.942 1.52.84 2.766 3.4 2.89 5.703.132-1.709-.509-5.383-3.5-6.498 4.181.732 4.549 3.832 4.549 3.832zM12.68 5.663l-.15-.485s-2.484-.441-5.822-.204C3.37 5.211 0 6.38 0 6.38s6.896-1.735 12.68-.717Z");
+  var pythonBluePath = new Path2D("M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z");
+  var pythonYellowPath = new Path2D("M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z");
   var maskCanvas = document.createElement("canvas");
   var maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
   if (!maskCtx) { console.error("Could not initialize the Kali dragon mask canvas."); return; }
   var letters = [], cols = 0, rows = 0, last = Date.now(), raf = null;
   var animationStarted = Date.now();
   var codeDuration = 2600, transitionDuration = 1100, holdDuration = 2800;
-  var cycleDuration = codeDuration + transitionDuration * 2 + holdDuration;
+  var logoDuration = codeDuration + transitionDuration * 2 + holdDuration;
+  var cycleDuration = logoDuration * 2;
   var coverageMin = 0.2;                             /* min. porsi sel yang tertutup naga agar huruf jadi biru */
 
   function rc() { return chars[Math.floor(Math.random() * chars.length)]; }
@@ -105,7 +110,7 @@
     return { r: a.r + (b.r - a.r) * f, g: a.g + (b.g - a.g) * f, b: a.b + (b.b - a.b) * f };
   }
   /* huruf yang menjadi bagian naga berubah jadi biru sesuai opacity (0..1) */
-  function draw(opacity) {
+  function draw(opacity, activeLogo) {
     if (!letters.length) return;
     var r = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, r.width, r.height);
@@ -113,10 +118,12 @@
     ctx.textBaseline = "top";
     for (var i = 0; i < letters.length; i++) {
       var l = letters[i];
-      var isDragon = l.dragon > 0 && opacity > 0;
-      /* huruf di luar naga diredupkan sedikit agar bentuk logo lebih jelas */
-      ctx.globalAlpha = isDragon ? 1 : 1 - 0.5 * opacity;
-      ctx.fillStyle = isDragon ? mix(l.rgb, blue, opacity) : mix(l.rgb, l.rgb, 0);
+      var isDragon = activeLogo === "kali" && l.dragon > 0;
+      var isPython = activeLogo === "python" && l.pythonColor > 0;
+      var isLogo = (isDragon || isPython) && opacity > 0;
+      var logoColor = isDragon ? blue : l.pythonColor === 1 ? pythonBlue : pythonYellow;
+      ctx.globalAlpha = isLogo ? 1 : 1 - 0.5 * opacity;
+      ctx.fillStyle = isLogo ? mix(l.rgb, logoColor, opacity) : mix(l.rgb, l.rgb, 0);
       ctx.fillText(l.char, l.x, l.y);
     }
     ctx.globalAlpha = 1;
@@ -129,32 +136,44 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     cols = Math.ceil(r.width / cw); rows = Math.ceil(r.height / ch);
 
-    /* gambar naga ke mask beresolusi sub x sub per sel huruf */
-    /* logo diskalakan dan diposisikan berdasarkan bounding box naga (x 0.04-23.99, y 3.08-20.9) */
-    var bw = 23.95, bh = 17.82, bx = 0.04, by = 3.08;
-    var logoScale = Math.min(r.width * 0.98 / bw, r.height * 0.98 / bh);
-    var logoX = (r.width - logoScale * bw) / 2 - bx * logoScale;
-    var logoY = (r.height - logoScale * bh) / 2 - by * logoScale;
     var mw = cols * sub, mh = rows * sub;
     maskCanvas.width = mw; maskCanvas.height = mh;
-    maskCtx.clearRect(0, 0, mw, mh);
     var sx = sub / cw, sy = sub / ch;
-    maskCtx.setTransform(logoScale * sx, 0, 0, logoScale * sy, logoX * sx, logoY * sy);
-    maskCtx.fill(dragonPath);
-    maskCtx.setTransform(1, 0, 0, 1, 0, 0);
-    var mask = maskCtx.getImageData(0, 0, mw, mh).data;
+    function getMask(path, bounds, translateY) {
+      var logoScale = Math.min(r.width * 0.98 / bounds.w, r.height * 0.98 / bounds.h);
+      var logoX = (r.width - logoScale * bounds.w) / 2 - bounds.x * logoScale;
+      var logoY = (r.height - logoScale * bounds.h) / 2 - bounds.y * logoScale;
+      maskCtx.clearRect(0, 0, mw, mh);
+      maskCtx.setTransform(logoScale * sx, 0, 0, logoScale * sy, logoX * sx, logoY * sy);
+      if (translateY) maskCtx.translate(0, translateY);
+      maskCtx.fill(path);
+      maskCtx.setTransform(1, 0, 0, 1, 0, 0);
+      return maskCtx.getImageData(0, 0, mw, mh).data;
+    }
+    var dragonMask = getMask(dragonPath, { x: 0.04, y: 3.08, w: 23.95, h: 17.82 }, 0);
+    var pythonBlueMask = getMask(pythonBluePath, { x: 14.5, y: 12.2, w: 99, h: 100 }, 10.26);
+    var pythonYellowMask = getMask(pythonYellowPath, { x: 14.5, y: 12.2, w: 99, h: 100 }, 10.26);
 
     letters = [];
     for (var y = 0; y < rows; y++) {
       for (var x = 0; x < cols; x++) {
-        var hit = 0;
+        var dragonHit = 0, blueHit = 0, yellowHit = 0;
         for (var j = 0; j < sub; j++)
-          for (var i = 0; i < sub; i++)
-            if (mask[((y * sub + j) * mw + (x * sub + i)) * 4 + 3] > 64) hit++;
-        var cov = hit / (sub * sub);
+          for (var i = 0; i < sub; i++) {
+            var alpha = ((y * sub + j) * mw + (x * sub + i)) * 4 + 3;
+            if (dragonMask[alpha] > 64) dragonHit++;
+            if (pythonBlueMask[alpha] > 64) blueHit++;
+            if (pythonYellowMask[alpha] > 64) yellowHit++;
+          }
+        var dragonCoverage = dragonHit / (sub * sub);
+        var blueCoverage = blueHit / (sub * sub);
+        var yellowCoverage = yellowHit / (sub * sub);
+        var pythonCoverage = Math.max(blueCoverage, yellowCoverage);
         letters.push({
           char: rc(), rgb: rcol(), target: rcol(), from: null, prog: 1,
-          x: x * cw, y: y * ch, dragon: cov >= coverageMin ? cov : 0
+          x: x * cw, y: y * ch,
+          dragon: dragonCoverage >= coverageMin,
+          pythonColor: pythonCoverage >= coverageMin ? (blueCoverage >= yellowCoverage ? 1 : 2) : 0
         });
       }
     }
@@ -183,7 +202,9 @@
     if (redraw) { update(); last = now; }
     if (smooth) transitions();
     if (redraw) {
-      var phase = (now - animationStarted) % cycleDuration;
+      var elapsed = (now - animationStarted) % cycleDuration;
+      var activeLogo = elapsed < logoDuration ? "kali" : "python";
+      var phase = elapsed % logoDuration;
       var opacity = 0;
       if (phase >= codeDuration) {
         phase -= codeDuration;
@@ -200,7 +221,7 @@
           }
         }
       }
-      draw(opacity);
+      draw(opacity, activeLogo);
     }
     raf = requestAnimationFrame(animate);
   }
