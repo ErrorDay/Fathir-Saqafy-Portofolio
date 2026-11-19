@@ -11,5 +11,5 @@ Struktur:
 Yang perlu diganti dengan data kamu:
   - "Your Name", "Your country", deskripsi, link GitHub/LinkedIn/email di index.html
   - Gambar proyek (placehold.co) di bagian Projects
-  - Form kontak: ganti YOUR_FORM_ID_HERE pada action form dengan ID Formspree milikmu
+  - Form kontak menggunakan Formspree; atur dan verifikasi email penerima di akun Formspree
   - Tombol Like menyimpan hitungan di localStorage browser (versi asli memakai Firebase)
