@@ -42,15 +42,46 @@
       <section class="rounded-2xl border border-[var(--white-icon-tr)] bg-[#1414149c] p-4">
         <h2 class="text-2xl font-semibold mb-4">Memilih pengenalan wajah</h2>
         <p class="text-[var(--white-icon)] mb-4">
-          Kami ingin mencoba pendekatan selain kartu NFC atau QR code. Pada alur yang dirancang, wajah siswa
-          didaftarkan terlebih dahulu, lalu diubah menjadi embedding dan disimpan di database. Saat presensi,
-          sistem mendeteksi wajah siswa.
+          Kami ingin mencoba pendekatan selain kartu NFC atau QR code. Wajah siswa didaftarkan terlebih dahulu,
+          diproses menjadi embedding, lalu disimpan di database. Saat presensi, sistem mendeteksi wajah dan
+          menggunakan backend Python untuk proses pengenalan. Database dan autentikasi ditangani oleh Supabase.
         </p>
-        <p class="text-sm text-[var(--white-icon)]">
-          Detail implementasi pengenalan wajah, pengujian, tantangan teknis, dan hasil penggunaan akan
-          ditambahkan setelah informasinya dilengkapi.
+        <p class="text-[var(--white-icon)]">
+          Untuk memilih library, kami mengevaluasi <code>face_recognition</code>, <code>deepface</code>, dan
+          <code>cv2</code>. Hasil awal belum optimal: beberapa opsi terasa berat atau lambat. Setelah riset dan
+          percobaan, saya memilih InsightFace karena menurut evaluasi kami lebih ringan, cepat, dan akurat untuk
+          menghasilkan embedding. Saya belum mencantumkan angka benchmark karena belum ada metrik terukur yang
+          dibagikan.
         </p>
       </section>
+
+      <section class="rounded-2xl border border-[var(--white-icon-tr)] bg-[#1414149c] p-4">
+        <h2 class="text-2xl font-semibold mb-4">Dari prototipe ke aplikasi live</h2>
+        <p class="text-[var(--white-icon)]">
+          Proyek dimulai sebagai prototipe KTI kelas 11. Setelah demo penuh pada sidang akhir, proyek memenangkan
+          Best Project pada exhibition sekolah. Sekolah kemudian mengadopsi sistem ini; aplikasi sudah online
+          untuk digunakan. Frontend dideploy di Vercel dan backend di Render.
+        </p>
+        <a href="https://presensi-sma.vercel.app/" target="_blank" rel="noopener noreferrer"
+          class="block py-1 mt-4 text-sm text-[var(--sec)]">Buka live demo →</a>
+      </section>
+
+      <section class="rounded-2xl border border-[var(--white-icon-tr)] bg-[#1414149c] p-4">
+        <h2 class="text-2xl font-semibold mb-4">Pelajaran dan langkah berikutnya</h2>
+        <p class="text-[var(--white-icon)] mb-4">
+          Riset teknologi sejak awal penting untuk menghindari pilihan yang tidak sesuai kebutuhan. Proses
+          mengevaluasi library memakan waktu sekitar tiga bulan, tetapi mengajarkan saya membandingkan performa
+          model—terutama kecepatan dan akurasi.
+        </p>
+        <p class="text-[var(--white-icon)]">
+          Langkah berikutnya yang ingin kami eksplorasi adalah liveness detection untuk membantu mencegah
+          presensi menggunakan foto. Fitur ini belum diimplementasikan.
+        </p>
+      </section>
+
+      <p class="text-sm text-[var(--white-icon)]">
+        Repositori kode: tautan belum ditambahkan.
+      </p>
     </article>
   </main>
 </body>
