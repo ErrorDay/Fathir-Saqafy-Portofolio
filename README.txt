@@ -4,6 +4,7 @@ Cara pakai: buka index.html (klik dua kali) di browser.
 
 Struktur:
   index.html      -> halaman utama
+  presensi.html   -> studi kasus teknis proyek presensi
   css/style.css   -> semua gaya (hasil build Tailwind)
   js/main.js      -> interaksi (navbar, accordion, animasi huruf, like, form)
   fonts/ svg/ favicon.png og.image.png -> aset
